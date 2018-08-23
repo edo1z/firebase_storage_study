@@ -6,7 +6,7 @@
     <div class="container">
       <div class="left">
         <div id="profile"></div>
-        <div id="dropbox">please drop your image files!</div>
+        <Dropbox/>
       </div>
       <div class="middle">
         <div id="imageList"></div>
@@ -16,7 +16,10 @@
 </template>
 
 <script>
+import Dropbox from './components/Dropbox.vue'
+
 export default {
+  components: {Dropbox},
   name: 'app'
 }
 </script>
@@ -37,12 +40,6 @@ html, body {
   margin    : 0;
 }
 .container {
-  padding: 10px;
-}
-#dropbox {
-  padding: 10px;
-  width: 100px;
-  height: 100px;
-  background:orange;
+  padding : 10px;
 }
 </style>
