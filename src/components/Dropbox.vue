@@ -19,7 +19,7 @@ export default {
     drop (e) {
       let file = e.dataTransfer.files[0]
       if (this.file_types.indexOf(file.type) < 0) return
-      console.log(file)
+      this.$storage.ref('/').child(file.name).put(file)
     }
   }
 }
