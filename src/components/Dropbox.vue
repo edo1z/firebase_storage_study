@@ -20,6 +20,11 @@ export default {
       let file = e.dataTransfer.files[0]
       if (this.file_types.indexOf(file.type) < 0) return
       this.$storage.ref('/').child(file.name).put(file)
+      this.$db.collection('files').doc(file.name).set({
+        name: file.name,
+        type: file.type,
+        size: file.size
+      })
     }
   }
 }
