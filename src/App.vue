@@ -1,25 +1,26 @@
 <template>
   <div id="app">
-    <div id="menu">
-      <h1>firebase storage study</h1>
-    </div>
+    <Menu />
     <div class="container">
       <div class="left">
-        <div id="profile"></div>
+        <Auth />
         <Dropbox/>
       </div>
       <div class="middle">
-        <div id="imageList"></div>
+       <Filelist />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Menu from './components/Menu.vue'
+import Auth from './components/Auth.vue'
 import Dropbox from './components/Dropbox.vue'
+import Filelist from './components/Filelist.vue'
 
 export default {
-  components: {Dropbox},
+  components: {Menu, Auth, Dropbox, Filelist},
   name: 'app'
 }
 </script>
@@ -27,17 +28,6 @@ export default {
 <style>
 html, body {
   margin : 0;
-}
-#menu {
-  background : green;
-  color      : white;
-  padding    : 10px 5px;
-  margin     : 0;
-}
-#menu h1 {
-  font-size : 16px;
-  padding   : 0;
-  margin    : 0;
 }
 .container {
   padding : 10px;
