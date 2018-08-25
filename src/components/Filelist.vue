@@ -12,7 +12,15 @@
      <td>{{ file.name }}</td>
      <td>{{ file.size }}</td>
      <td>{{ file.type }}</td>
-     <td>Delete</td>
+      <td>
+        <a
+          href=""
+          @click.prevent.stop="deleteFile"
+          :data-name="file.name"
+        >
+          Delete
+        </a>
+      </td>
     </tr>
   </table>
 </template>
@@ -32,9 +40,20 @@ export default {
           case 'modified':
             vm.$set(vm.files, change.doc.data().name, change.doc.data())
             break
+          case 'removed':
+            vm.$delete(vm.files, change.doc.data().name)
+            break
         }
       })
     })
+  },
+  methods: {
+    deleteFile (e) {
+      let fileName = e.target.dataset.name
+      this.$storage.ref('/').child(fileName).delete()
+      .then(() => this.$db.collection('files').doc(fileName).delete())
+      .catch(err => console.log(err))
+    }
   }
 }
 </script>
