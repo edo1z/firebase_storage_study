@@ -19,12 +19,22 @@ export default {
     drop (e) {
       let file = e.dataTransfer.files[0]
       if (this.file_types.indexOf(file.type) < 0) return
-      this.$storage.ref('/').child(file.name).put(file)
-      this.$db.collection('files').doc(file.name).set({
-        name: file.name,
-        type: file.type,
-        size: file.size
-      })
+      let upload = this.$storage.ref('/').child(file.name).put(file)
+      upload.on('state_changed',
+        null,
+        err => console.log(err),
+        () => {
+          upload.snapshot.ref.getDownloadURL()
+          .then(url => {
+            this.$db.collection('files').doc(file.name).set({
+              name: file.name,
+              type: file.type,
+              size: file.size,
+              url: url
+            })
+          })
+        }
+      )
     }
   }
 }

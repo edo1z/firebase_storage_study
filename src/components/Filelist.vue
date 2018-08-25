@@ -1,12 +1,14 @@
 <template>
   <table id="filelist">
     <tr v-if="files">
+      <th></th>
       <th>file name</th>
       <th>file size</th>
       <th>file type</th>
       <th></th>
     </tr>
     <tr v-for="file in files" :key="file.name">
+     <td><img :src="file.url" style="max-width:150px;"/></td>
      <td>{{ file.name }}</td>
      <td>{{ file.size }}</td>
      <td>{{ file.type }}</td>
@@ -19,7 +21,7 @@
 export default {
   name: 'Filelist',
   data: () => ({
-    files: []
+    files: {}
   }),
   created: function() {
     let vm = this
@@ -27,7 +29,9 @@ export default {
       snap.docChanges().forEach(function (change) {
         switch (change.type) {
           case 'added':
-            vm.files.push(change.doc.data())
+          case 'modified':
+            vm.$set(vm.files, change.doc.data().name, change.doc.data())
+            break
         }
       })
     })
