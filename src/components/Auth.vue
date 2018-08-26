@@ -1,6 +1,12 @@
 <template>
   <div id="auth">
-    <button v-if="user" @click.prevent="sighOut">Sign Out</button>
+    <template v-if="user">
+      <div>
+        <img :src="user.photoURL" class="profileImg"/>
+        <p>{{ user.displayName }}</p>
+      </div>
+      <button  @click.prevent="sighOut">Sign Out</button>
+    </template>
     <button v-else @click.prevent="signIn">Sign in</button>
   </div>
 </template>
@@ -40,5 +46,9 @@ export default {
   background:#09c;
   color:#fff;
   font-weight:bold;
+}
+.profileImg {
+  width: 50px;
+  height: 50px;
 }
 </style>
