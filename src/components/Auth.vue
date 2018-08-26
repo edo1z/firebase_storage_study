@@ -5,33 +5,26 @@
         <img :src="user.photoURL" class="profileImg"/>
         <p>{{ user.displayName }}</p>
       </div>
-      <button  @click.prevent="sighOut">Sign Out</button>
+      <button  @click.prevent="signOut">Sign Out</button>
     </template>
     <button v-else @click.prevent="signIn">Sign in</button>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Auth',
-  data: () => ({
-    user: null
-  }),
-  created () {
-    this.$auth().onAuthStateChanged(user => this.user = user)
+  computed: {
+    ...mapState({
+      user: state => state.auth.user
+    })
   },
   methods: {
-    signIn () {
-      let provider = new this.$auth.GoogleAuthProvider()
-      this.$auth().signInWithPopup(provider)
-      .then(() => console.log('loggedIn'))
-      .catch(err => console.log(err.code, err.message))
-    },
-    sighOut () {
-      this.$auth().signOut().then(() => {
-        this.user = null
-      }).catch((err) => console.log(err))
-    }
+    ...mapActions({
+      signIn: 'auth/signIn',
+      signOut: 'auth/signOut'
+    })
   }
 }
 </script>

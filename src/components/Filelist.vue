@@ -26,33 +26,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Filelist',
-  data: () => ({
-    files: {}
-  }),
-  created: function() {
-    let vm = this
-    this.$db.collection('files').onSnapshot(function(snap) {
-      snap.docChanges().forEach(function (change) {
-        switch (change.type) {
-          case 'added':
-          case 'modified':
-            vm.$set(vm.files, change.doc.data().name, change.doc.data())
-            break
-          case 'removed':
-            vm.$delete(vm.files, change.doc.data().name)
-            break
-        }
-      })
+  computed: {
+    ...mapState({
+      files: state => state.files.fileList,
+      user: state => state.auth.user
     })
   },
   methods: {
     deleteFile (e) {
       let fileName = e.target.dataset.name
-      this.$storage.ref('/').child(fileName).delete()
-      .then(() => this.$db.collection('files').doc(fileName).delete())
-      .catch(err => console.log(err))
+      this.$store.dispatch('files/delete', { fileName: fileName, user: this.user })
     }
   }
 }

@@ -1,23 +1,23 @@
 import Vue from 'vue'
 import App from './App.vue'
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/storage'
-import 'firebase/auth'
-import config from '../firebase.config'
-
-//firebase init
-firebase.initializeApp(config)
-const db = firebase.firestore()
-db.settings({timestampsInSnapshots: true})
-const storage = firebase.storage()
-const auth = firebase.auth
+import store from './store'
+import { mapState } from 'vuex'
 
 Vue.config.productionTip = false
-Vue.prototype.$db = db
-Vue.prototype.$storage = storage
-Vue.prototype.$auth = auth
-
 new Vue({
+  store,
+  beforeCreate () {
+    store.dispatch('auth/init', this)
+  },
+  computed: {
+    ...mapState({
+      user: state => state.auth.user
+    })
+  },
+  watch: {
+    user: function () {
+      store.dispatch('files/init', this.user)
+    }
+  },
   render: h => h(App)
 }).$mount('#app')
